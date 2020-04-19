@@ -7,7 +7,7 @@ import pandas as pd
 
 # interval is the data retrieval interval (this can be either 1d, 1w or 1m)
 
-# NEED RETURN AND OUTSTANDING NUMBER OF SHARES
+# OUTSTANDING NUMBER OF SHARES
 
 
 def pull_all_data(src, start_idx=0):
@@ -33,8 +33,8 @@ def pull_all_data(src, start_idx=0):
                     screen = False
                 except HTTPError as e:
                     if e.code == 401:
-                        print(f"\nWaiting 120 Seconds, index = {i}")
-                        time.sleep(120)
+                        print(f"\nWaiting 30 Seconds, index = {i}")
+                        time.sleep(30)
                     else:
                         print(e)
                         with open("ALL_DATA/Lists/missed.txt", "a") as missed_file:
@@ -48,6 +48,7 @@ def pull_all_data(src, start_idx=0):
 
 current_time = str(math.floor(time.time()))
 # Times:
+# 2020-03-19 : 1584576000
 # 2020-01-01 : 1577836800
 # 2019-01-01 : 1546300800
 # 2000-01-01 : 946684800
@@ -55,7 +56,7 @@ current_time = str(math.floor(time.time()))
 
 
 def make_url(
-    ticker_symbol, period1="1577836800", period2=current_time, interval="1d",
+    ticker_symbol, period1="1546300800", period2=current_time, interval="1d",
 ):
     return "https://query1.finance.yahoo.com/v7/finance/download/{}?period1={}&period2={}&interval={}&events=history".format(
         ticker_symbol, period1, period2, interval
@@ -90,7 +91,7 @@ def pull_historical_data(ticker_symbol):
 
 def get_PRN_data():
     urllib.request.urlretrieve(
-        "https://query1.finance.yahoo.com/v7/finance/download/PRN?period1=1577836800&period2=1585872000&interval=1d&events=history",
+        f"https://query1.finance.yahoo.com/v7/finance/download/PRN?period1=1546300800&period2={current_time}&interval=1d&events=history",
         "ALL_DATA/Data/_PRN.csv",
     )
     df = pd.read_csv(
@@ -113,10 +114,12 @@ if __name__ == "__main__":
 
     start_time = time.time()
     get_PRN_data()
-    stop_index = pull_all_data("ALL_DATA/Lists/new_list.txt")
+    indices = pull_all_data("ALL_DATA/Lists/indices.txt")
+    stop_index = pull_all_data("ALL_DATA/Lists/COMPANY_LIST.txt")
+
     end_time = time.time()
 
     print("\n--- TOTAL TIME ---")
     print(f"{round(end_time-start_time, 4)} seconds\n")
-    print(f"--- AVERAGE TIME OVER {stop_index} STOCKS ---")
-    print(f"{round((end_time - start_time) / stop_index , 4)} SECONDS PER STOCK")
+    print(f"--- AVERAGE TIME OVER {stop_index + indices} STOCKS ---")
+    print(f"{round((end_time - start_time) / (stop_index + indices) , 4)} SECONDS PER STOCK")
