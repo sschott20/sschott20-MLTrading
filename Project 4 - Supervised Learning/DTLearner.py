@@ -4,7 +4,6 @@ class DTLearner(object):
 
     def __init__(self, leaf_size=1, verbose=False):
         self.leaf_size = leaf_size
-        print("DT init")
         pass  # move along, these aren't the drones you're looking for
 
 

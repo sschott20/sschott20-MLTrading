@@ -16,7 +16,7 @@ class BagLearner(object):
 
     def addEvidence(self, dataX, dataY):
         """
-        @summary: Add training data to learner
+        @summary: create subsamples of data and then add to all bags
         @param dataX: X values of data to add
         @param dataY: the Y training values
         """
@@ -24,16 +24,18 @@ class BagLearner(object):
 
         learners_data = []
 
+        # creates randomized subsamples of the data
         for i in range(0, self.bags):
-            random_indecies = np.random.choice(data.shape[0], int(self.sample_percent * data.shape[0]), replace=False)
+            random_indecies = np.random.choice(data.shape[0], int(self.sample_percent * data.shape[0]), replace=True)
             learners_data.append(data[random_indecies, :])
 
+        # runs regresion for each learner stored in learners_list
         for i in range(0, self.bags):
             self.learners_list[i].addEvidence(learners_data[i][:, :-1], learners_data[i][:, -1])
 
     def query(self, points):
         """
-        @summary: Estimate a set of test points given the model we built.
+        @summary: Estimate a set of test points given the model we built by taking the average of all bags.
         @param points: should be a numpy array with each row corresponding to a specific query.
         @returns the estimated values according to the saved model.
         """

@@ -56,7 +56,7 @@ current_time = str(math.floor(time.time()))
 
 
 def make_url(
-    ticker_symbol, period1="1546300800", period2=current_time, interval="1d",
+    ticker_symbol, period1="1546300800", period2="1587513600", interval="1d",
 ):
     return "https://query1.finance.yahoo.com/v7/finance/download/{}?period1={}&period2={}&interval={}&events=history".format(
         ticker_symbol, period1, period2, interval
