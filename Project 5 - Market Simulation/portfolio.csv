@@ -1,3 +1,4 @@
-ticker,number
-AAPL,50
-MSFT,20
+Symbol,Stocks
+AAPL,100
+MSFT,-100
+ZM,20

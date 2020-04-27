@@ -9,4 +9,4 @@ if __name__ == "__main__":
     orders_file = "orders.csv"
 
     Sim = ms.MarketSim(portfolio_file, orders_file, "2019-01-01")
-    Sim.order()
+    Sim.order_stonks()
