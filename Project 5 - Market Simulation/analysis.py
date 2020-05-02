@@ -1,9 +1,7 @@
 import os
 import sys
 import pandas as pd
-from util import get_data
-sys.path.insert(0, os.path.dirname(os.getcwd()))
-
+from sim_util import get_data
 
 def portfolio_statistics(
         start_date,

@@ -3,24 +3,32 @@ import pandas as pd
 import os
 import sim_util as util
 import datetime as dt
+import time
 
 class MarketSim(object):
 
-    def __init__(self, portfolio_file, orders_file, start_date, current_date):
+    def __init__(self, portfolio_file, orders_file, start_date, current_date, starting_balance):
+        self.balance = starting_balance
+
         self.start_date = start_date
         self.current_date = current_date
+
         self.portfolio_file = portfolio_file
         self.orders_file = orders_file
 
-        t = pd.date_range(start_date, current_date)
+        self.dates = util.get_data(["SPY"], pd.date_range(start_date, '2020-05-01')).index
 
-        self.dates = util.get_data(["SPY"], t).index
-        print(self.dates)
         try:
             self.current_date_index = self.dates.get_loc(current_date)
-        except Exception as e:
+        except:
             try:
-                self.current_date_index = self.dates.get_loc()
+                self.current_date_index = self.dates.get_loc(dt.datetime.strptime(current_date, '%Y-%m-%d').date() - dt.timedelta(days=1))
+            except:
+                try:
+                    self.current_date_index = self.dates.get_loc(dt.datetime.strptime(current_date, '%Y-%m-%d').date() - dt.timedelta(days=2))
+                except:
+                    print("Invalid: Current Date")
+        print(self.current_date_index)
         self.update_files()
 
     def update_files(self):
@@ -45,8 +53,10 @@ class MarketSim(object):
 
     def update(self, time_scale="1d", step_size=1):
         stocklist = []
+        self.current_date_index = self.current_date_index + 1
+        self.current_date = self.dates[self.current_date_index]
 
-        # self.current_date = self.dates[]
+        print(self.current_date, self.current_date_index)
         dates = pd.date_range(self.start_date, self.current_date)
 
         with open("portfolio.csv", "r") as f:
@@ -56,5 +66,4 @@ class MarketSim(object):
             portfolio.remove(['Symbol', 'Stocks'])
             stocklist = [line[0] for line in portfolio]
 
-        # print(util.get_data(stocklist, dates))
-        return util.get_data(stocklist,dates)
+        return util.get_data(stocklist, dates)
