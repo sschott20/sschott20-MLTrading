@@ -3,13 +3,13 @@ import pygame
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
-RED = (255, 0, 0)
+RED = (235, 82, 52)
 YELLOW = (252, 186, 3)
 
 WIDTH = 30
 HEIGHT = 30
 
-MARGIN = 5
+MARGIN = 3
 
 def display(grids):
     grid_width = len(grids[0][0])
@@ -49,6 +49,6 @@ def display(grids):
                                   WIDTH,
                                   HEIGHT])
 
-        clock.tick(4)
+        clock.tick(16)
         pygame.display.flip()
     pygame.quit()

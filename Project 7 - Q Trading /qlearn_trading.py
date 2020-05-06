@@ -2,7 +2,7 @@ import random
 
 
 class QLearn(object):
-    def __init__(self, actions, q=None, c=0.1, alpha=0.2, gamma=0.9, cdecay=0.999):
+    def __init__(self, actions, q=None, c=0.3, alpha=0.2, gamma=0.9, cdecay=0.999):
         # table of [state,action] pairs and Q values
         if q is None:
             self.q = {}

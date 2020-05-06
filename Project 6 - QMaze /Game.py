@@ -26,7 +26,8 @@ def start_game(maze_template, player, delay=0, output=False):
 
     player.new_game()
     if output:
-        display_grids.append(maze_display)
+        for j in range(10):
+            display_grids.append(maze_display)
     i = 0
     while not game_end:
         i += 1
@@ -73,26 +74,28 @@ def start_game(maze_template, player, delay=0, output=False):
 
 if __name__ == '__main__':
 
-    training_steps = 40000
+    training_steps = 200000
     actions = ["left", "right", "up", "down"]
-    training_player = player.Player(actions, c=0.5, cdecay=0.9999)
-    MAP_SIZE = 12
+    training_player = player.Player(actions, alpha=0.3, gamma=0.9, c=0.5, cdecay=0.999999)
+    MAP_SIZE = 26
     maze_template = np.zeros((MAP_SIZE, MAP_SIZE), dtype=int)
     maze_template[0, :] = 3
     maze_template[1:, 0] = 3
     maze_template[1:, -1] = 3
     maze_template[-1, 1:-1] = 3
-    maze_template[3, 3:6] = 3
-    maze_template[5, 3:10] = 3
-    maze_template[7:11, 3] = 3
-    maze_template[3:11, 11] = 3
-    maze_template[9, 5:10] = 3
-    for i in range(15):
+    for i in range(6):
+        a,b = random.randint(1, MAP_SIZE - 2), random.randint(1, MAP_SIZE - 2)
+
+        maze_template[a, b:b + random.randint(3,7)] = 3
+    for i in range(6):
+        a, b = random.randint(1, MAP_SIZE - 2), random.randint(1, MAP_SIZE - 2)
+        maze_template[a:a+random.randint(3,7), b] = 3
+    for i in range(150):
         maze_template[random.randint(1, MAP_SIZE - 2), random.randint(1, MAP_SIZE - 2)] = 3
 
     print("Training Start")
     for i in range(training_steps + 1):
-        if i % 1000 == 0:
+        if i % 2500 == 0:
             training_player.output_table(i)
             print(i)
         start_game(delay=0, output=False, maze_template=maze_template, player=training_player)
@@ -102,11 +105,11 @@ if __name__ == '__main__':
 
     print("Starting Testing")
     player_list = []
-    for i in range(0, training_steps + 1, 1000):
-        file = "qtable-" + str(i) + ".txt"
+    for i in range(0, training_steps + 1, 2500):
+        file = "qtables/qtable-" + str(i) + ".txt"
         player_list.append(smart_player.Player(actions, qfile=file))
     for n, ai in enumerate(player_list):
-        print(n * 1000)
+        print(n * 2500)
         for i in range(1):
             t = True
             while t:

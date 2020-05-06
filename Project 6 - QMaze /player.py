@@ -25,14 +25,14 @@ class Player(object):
         state = int(a_string)
 
         if board[player_position[0], player_position[1]] == 3:
-            reward = -100
+            reward = -1000
             if self.last_state is not None:
                 self.ai.learn(self.last_state, self.last_action, reward, state)
             self.last_state = None
             return "end"
 
         if player_position == goal_position:
-            reward = 100
+            reward = 1000
             if self.last_state is not None:
                 self.ai.learn(self.last_state, self.last_action, reward, state)
             self.last_state = None
@@ -47,7 +47,7 @@ class Player(object):
 
         return(self.last_action)
     def output_table(self, plays):
-        with open(f"qtable-{plays}.txt", "w+") as f:
+        with open(f"qtables/qtable-{plays}.txt", "w+") as f:
             f.truncate(0)
             for i in self.ai.q:
                 f.write(str(i))
