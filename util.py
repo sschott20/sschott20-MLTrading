@@ -18,6 +18,8 @@ def symbol_to_path(symbol, base_dir=None):
     #     base_dir = os.environ.get("MARKET_DATA_DIR", "../data/")
     #     print(base_dir)
     # return os.path.join(base_dir, "{}.csv".format(str(symbol)))
+
+
 def symbol_to_check_path(symbol, base_dir=None):
     """Return CSV file path given ticker symbol.
     If CSV is not already downloaded, will download from yahoo finance """
@@ -31,12 +33,14 @@ def symbol_to_check_path(symbol, base_dir=None):
     #     print(base_dir)
     # return os.path.join(base_dir, "{}.csv".format(str(symbol)))
 
+
 def symbol_to_old_path(symbol, base_dir=None):
     """Return CSV file path given ticker symbol."""
     if base_dir is None:
         base_dir = os.environ.get("MARKET_DATA_DIR", "../old_data/")
     print(base_dir)
     return os.path.join(base_dir, "{}.csv".format(str(symbol)))
+
 
 def get_check_data(symbols, dates, addSPY=True, colname="PX_LAST"):
     """Read stock data (adjusted close) for given symbols from CSV files."""
@@ -61,6 +65,7 @@ def get_check_data(symbols, dates, addSPY=True, colname="PX_LAST"):
             df = df.dropna(subset=["SPY"])
 
     return df
+
 
 def get_data(symbols, dates, addSPY=True, colname="Adj Close"):
     """Read stock data (adjusted close) for given symbols from CSV files."""

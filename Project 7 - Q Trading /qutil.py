@@ -1,6 +1,7 @@
 import pandas as pd
 from historical_data import *
 
+
 def symbol_to_path(symbol):
     """Return CSV file path given ticker symbol.
     If CSV is not already downloaded, will download from yahoo finance """
@@ -10,11 +11,12 @@ def symbol_to_path(symbol):
 
     return os.path.join(base_dir, "{}.csv".format(str(symbol)))
 
+
 def get_data(symbols, dates, removeSPY=True, colname="Adj Close"):
     """Read stock data (adjusted close) for given symbols from CSV files."""
     df = pd.DataFrame(index=dates)
     # remove_SPY = False
-    if "SPY" not in symbols: # add SPY for reference, if absent
+    if "SPY" not in symbols:  # add SPY for reference, if absent
         # remove_SPY = True
         symbols = ["SPY"] + list(
             symbols

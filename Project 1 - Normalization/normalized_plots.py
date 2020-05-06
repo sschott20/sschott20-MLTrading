@@ -1,9 +1,9 @@
 import os
 import sys
 import pandas as pd
+
 sys.path.insert(0, os.path.dirname(os.getcwd()))
 from util import get_data, plot_data
-
 
 
 def normalize_data(df):

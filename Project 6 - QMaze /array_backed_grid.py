@@ -11,6 +11,7 @@ HEIGHT = 30
 
 MARGIN = 3
 
+
 def display(grids):
     grid_width = len(grids[0][0])
     grid_height = len(grids[0])
@@ -42,12 +43,16 @@ def display(grids):
                     color = RED
                 elif grid[row][column] == 2:
                     color = YELLOW
-                pygame.draw.rect(screen,
-                                 color,
-                                 [(MARGIN + WIDTH) * column + MARGIN,
-                                  (MARGIN + HEIGHT) * row + MARGIN,
-                                  WIDTH,
-                                  HEIGHT])
+                pygame.draw.rect(
+                    screen,
+                    color,
+                    [
+                        (MARGIN + WIDTH) * column + MARGIN,
+                        (MARGIN + HEIGHT) * row + MARGIN,
+                        WIDTH,
+                        HEIGHT,
+                    ],
+                )
 
         clock.tick(16)
         pygame.display.flip()

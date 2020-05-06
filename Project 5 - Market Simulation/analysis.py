@@ -3,13 +3,9 @@ import sys
 import pandas as pd
 from sim_util import get_data
 
+
 def portfolio_statistics(
-        start_date,
-        end_date,
-        symbols,
-        allocations,
-        start_value,
-        risk_free_rate,
+    start_date, end_date, symbols, allocations, start_value, risk_free_rate,
 ):
     # Get and fill data
     dates = pd.date_range(start_date, end_date)

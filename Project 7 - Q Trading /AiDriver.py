@@ -4,9 +4,7 @@ import pandas as pd
 if __name__ == "__main__":
     print("START")
     actions = ["BUY-1", "BUY-5", "SELL-1", "SELL-5", "NOTHING"]
-    parameters = {"Adj/SMA": 7,
-                  "Holding": 0
-                  }
+    parameters = {"Adj/SMA": 7, "Holding": 0}
     starting_balance = 100000
     t = "2000-01-01"
     start_date = "2020-01-04"

@@ -1,7 +1,7 @@
 import numpy as np
 
-class BagLearner(object):
 
+class BagLearner(object):
     def __init__(self, learner, kwargs, bags, boost, sample_percent, verbose=False):
         self.learners_list = []
         self.learner = learner
@@ -12,7 +12,6 @@ class BagLearner(object):
         self.verbose = verbose
         self.sample_percent = sample_percent
         pass  # move along, these aren't the drones you're looking for
-
 
     def addEvidence(self, dataX, dataY):
         """
@@ -26,12 +25,16 @@ class BagLearner(object):
 
         # creates randomized subsamples of the data
         for i in range(0, self.bags):
-            random_indecies = np.random.choice(data.shape[0], int(self.sample_percent * data.shape[0]), replace=True)
+            random_indecies = np.random.choice(
+                data.shape[0], int(self.sample_percent * data.shape[0]), replace=True
+            )
             learners_data.append(data[random_indecies, :])
 
         # runs regresion for each learner stored in learners_list
         for i in range(0, self.bags):
-            self.learners_list[i].addEvidence(learners_data[i][:, :-1], learners_data[i][:, -1])
+            self.learners_list[i].addEvidence(
+                learners_data[i][:, :-1], learners_data[i][:, -1]
+            )
 
     def query(self, points):
         """

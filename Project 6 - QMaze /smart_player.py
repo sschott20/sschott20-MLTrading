@@ -3,10 +3,10 @@ import qlearn
 import time
 import re
 
-class Player(object):
-    def __init__(self, actions, qfile='qtable.txt'):
-        self.actions = actions
 
+class Player(object):
+    def __init__(self, actions, qfile="qtable.txt"):
+        self.actions = actions
 
         qtable = {}
         # line[i] = (4239, 'right'):-1
@@ -14,11 +14,11 @@ class Player(object):
             lines = f.readlines()
         for line in lines:
             line = line.split(":")
-            #["(69210, 'right')", '-1\n']
+            # ["(69210, 'right')", '-1\n']
 
             index = line[0].split(",")
-            index[0] = int(re.sub('[^A-Za-z0-9]+', '', index[0]))
-            index[1] = re.sub('[^A-Za-z0-9]+', '', index[1])
+            index[0] = int(re.sub("[^A-Za-z0-9]+", "", index[0]))
+            index[1] = re.sub("[^A-Za-z0-9]+", "", index[1])
             value = line[1].strip("\n")
             value = float(value)
             qtable[(index[0], index[1])] = value
@@ -49,4 +49,4 @@ class Player(object):
         self.last_state = state
         self.last_action = action
 
-        return(self.last_action)
+        return self.last_action

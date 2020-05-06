@@ -2,10 +2,8 @@ import numpy as np
 
 
 class LinRegLearner(object):
-
     def __init__(self, verbose=False):
         pass  # move along, these aren't the drones you're looking for
-
 
     def addEvidence(self, dataX, dataY):
         """  		  	   		     			  		 			     			  	  		 	  	 		 			  		  			
@@ -14,12 +12,14 @@ class LinRegLearner(object):
         @param dataY: the Y training values  		  	   		     			  		 			     			  	  		 	  	 		 			  		  			
         """
 
-        # slap on 1s column so linear regression finds a constant term  		  	   		     			  		 			     			  	  		 	  	 		 			  		  			
+        # slap on 1s column so linear regression finds a constant term
         newdataX = np.ones([dataX.shape[0], dataX.shape[1] + 1])
-        newdataX[:, 0:dataX.shape[1]] = dataX
+        newdataX[:, 0 : dataX.shape[1]] = dataX
 
-        # build and save the model  		  	   		     			  		 			     			  	  		 	  	 		 			  		  			
-        self.model_coefs, residuals, rank, s = np.linalg.lstsq(newdataX, dataY, rcond=None)
+        # build and save the model
+        self.model_coefs, residuals, rank, s = np.linalg.lstsq(
+            newdataX, dataY, rcond=None
+        )
 
     def query(self, points):
         """  		  	   		     			  		 			     			  	  		 	  	 		 			  		  			

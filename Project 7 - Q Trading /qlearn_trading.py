@@ -29,7 +29,7 @@ class QLearn(object):
             self.q[(state, action)] = reward
         else:
             self.q[(state, action)] = (1 - self.alpha) * oldq + self.alpha * (
-                    reward + self.gamma * max_future_reward
+                reward + self.gamma * max_future_reward
             )
 
     def choose_action(self, state):

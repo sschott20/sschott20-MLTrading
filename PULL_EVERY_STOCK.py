@@ -122,4 +122,6 @@ if __name__ == "__main__":
     print("\n--- TOTAL TIME ---")
     print(f"{round(end_time-start_time, 4)} seconds\n")
     print(f"--- AVERAGE TIME OVER {stop_index + indices} STOCKS ---")
-    print(f"{round((end_time - start_time) / (stop_index + indices) , 4)} SECONDS PER STOCK")
+    print(
+        f"{round((end_time - start_time) / (stop_index + indices) , 4)} SECONDS PER STOCK"
+    )

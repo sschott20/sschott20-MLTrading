@@ -1,11 +1,10 @@
 import numpy as np
 
-class DTLearner(object):
 
+class DTLearner(object):
     def __init__(self, leaf_size=1, verbose=False):
         self.leaf_size = leaf_size
         pass  # move along, these aren't the drones you're looking for
-
 
     def addEvidence(self, dataX, dataY):
         """
@@ -19,6 +18,7 @@ class DTLearner(object):
         # print(self.tree)
         # build and save the model
         # print("output: \n" + str(build_tree(data)))
+
     def query(self, points):
         """
         @summary: Estimate a set of test points given the model we built.
@@ -42,13 +42,13 @@ class DTLearner(object):
             guesses.append(line[1])
         return np.array(guesses, dtype=float)
 
-
     def build_tree(self, data):
         if data.shape[0] <= self.leaf_size:
             return np.array([["Leaf", np.mean(data[:, -1]), "NA", "NA"]], dtype=object)
         # check to see if all Y data is the same and return leaf if so
         a = data[:, -1] == data[0, -1]
-        if np.all(a): return np.array([["Leaf", data[0, -1], "NA", "NA"]], dtype=object)
+        if np.all(a):
+            return np.array([["Leaf", data[0, -1], "NA", "NA"]], dtype=object)
 
         i = self.find_highest_coralation(data)
         SplitVal = np.median(data[:, i])
@@ -74,6 +74,7 @@ class DTLearner(object):
                 max_correlation = correlation
                 index = i
         return index
+
 
 if __name__ == "__main__":
     print("the secret clue is 'zzyzx'")

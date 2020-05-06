@@ -5,9 +5,11 @@ import sim_util as util
 import datetime as dt
 import time
 
-class MarketSim(object):
 
-    def __init__(self, portfolio_file, orders_file, start_date, current_date, starting_balance):
+class MarketSim(object):
+    def __init__(
+        self, portfolio_file, orders_file, start_date, current_date, starting_balance
+    ):
         self.balance = starting_balance
 
         self.start_date = start_date
@@ -16,16 +18,24 @@ class MarketSim(object):
         self.portfolio_file = portfolio_file
         self.orders_file = orders_file
 
-        self.dates = util.get_data(["SPY"], pd.date_range(start_date, '2020-05-01')).index
+        self.dates = util.get_data(
+            ["SPY"], pd.date_range(start_date, "2020-05-01")
+        ).index
 
         try:
             self.current_date_index = self.dates.get_loc(current_date)
         except:
             try:
-                self.current_date_index = self.dates.get_loc(dt.datetime.strptime(current_date, '%Y-%m-%d').date() - dt.timedelta(days=1))
+                self.current_date_index = self.dates.get_loc(
+                    dt.datetime.strptime(current_date, "%Y-%m-%d").date()
+                    - dt.timedelta(days=1)
+                )
             except:
                 try:
-                    self.current_date_index = self.dates.get_loc(dt.datetime.strptime(current_date, '%Y-%m-%d').date() - dt.timedelta(days=2))
+                    self.current_date_index = self.dates.get_loc(
+                        dt.datetime.strptime(current_date, "%Y-%m-%d").date()
+                        - dt.timedelta(days=2)
+                    )
                 except:
                     print("Invalid: Current Date")
         print(self.current_date_index)
@@ -63,7 +73,7 @@ class MarketSim(object):
             portfolio = f.read().splitlines()
             portfolio = [line.split(",") for line in portfolio]
 
-            portfolio.remove(['Symbol', 'Stocks'])
+            portfolio.remove(["Symbol", "Stocks"])
             stocklist = [line[0] for line in portfolio]
 
         return util.get_data(stocklist, dates)

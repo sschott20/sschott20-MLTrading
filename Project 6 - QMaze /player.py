@@ -45,7 +45,8 @@ class Player(object):
         self.last_state = state
         self.last_action = action
 
-        return(self.last_action)
+        return self.last_action
+
     def output_table(self, plays):
         with open(f"qtables/qtable-{plays}.txt", "w+") as f:
             f.truncate(0)

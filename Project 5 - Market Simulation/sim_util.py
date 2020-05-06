@@ -12,11 +12,12 @@ def symbol_to_path(symbol):
 
     return os.path.join(base_dir, "{}.csv".format(str(symbol)))
 
+
 def get_data(symbols, dates, addSPY=True, colname="Adj Close"):
     """Read stock data (adjusted close) for given symbols from CSV files."""
     df = pd.DataFrame(index=dates)
     remove_SPY = False
-    if addSPY and "SPY" not in symbols: # add SPY for reference, if absent
+    if addSPY and "SPY" not in symbols:  # add SPY for reference, if absent
         remove_SPY = True
         symbols = ["SPY"] + list(
             symbols

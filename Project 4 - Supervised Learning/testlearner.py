@@ -4,13 +4,14 @@ import LinRegLearner as lrl
 import DTLearner as dtl
 import BagLearner as bl
 import RTLearner as rtl
+
 # import RTLearner as rtl
 import sys
 
 if __name__ == "__main__":
     # # Open and convert .csv
-    inf = open('./Data/Istanbul.csv')
-    data = np.genfromtxt(inf, delimiter=',')
+    inf = open("./Data/Istanbul.csv")
+    data = np.genfromtxt(inf, delimiter=",")
     # For Istanbul.csv
     data = data[1:, 1:]
 
@@ -27,8 +28,14 @@ if __name__ == "__main__":
     testX = data[train_rows:, 0:-1]
     testY = data[train_rows:, -1]
 
-    learner = bl.BagLearner(learner=rtl.RTLearner, kwargs={"leaf_size": 1}, bags=100, boost=False,
-                            verbose=False, sample_percent=1)
+    learner = bl.BagLearner(
+        learner=rtl.RTLearner,
+        kwargs={"leaf_size": 1},
+        bags=100,
+        boost=False,
+        verbose=False,
+        sample_percent=1,
+    )
     # learner = dtl.DTLearner(leaf_size=1)
     # learner = dtl.DTLearner(leaf_size=2)
     learner.addEvidence(trainX, trainY)

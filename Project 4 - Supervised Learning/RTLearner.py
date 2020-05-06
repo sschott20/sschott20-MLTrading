@@ -2,7 +2,6 @@ import numpy as np
 
 
 class RTLearner(object):
-
     def __init__(self, leaf_size=1, verbose=False):
         self.leaf_size = leaf_size
         self.verbose = verbose
@@ -53,7 +52,9 @@ class RTLearner(object):
         # Generate new left and right trees, root
         left_tree = self.build_tree(data[data[:, feature_index] <= split_value])
         right_tree = self.build_tree(data[data[:, feature_index] > split_value])
-        root = np.array([[feature_index, split_value, 1, left_tree.shape[0] + 1]], dtype=object)
+        root = np.array(
+            [[feature_index, split_value, 1, left_tree.shape[0] + 1]], dtype=object
+        )
 
         return np.concatenate((root, left_tree, right_tree), axis=0)
 

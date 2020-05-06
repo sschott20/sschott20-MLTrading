@@ -2,16 +2,12 @@ import os
 import sys
 import pandas as pd
 from util import get_data
+
 sys.path.insert(0, os.path.dirname(os.getcwd()))
 
 
 def portfolio_statistics(
-        start_date,
-        end_date,
-        symbols,
-        allocations,
-        start_value,
-        risk_free_rate,
+    start_date, end_date, symbols, allocations, start_value, risk_free_rate,
 ):
     # Get and fill data
     dates = pd.date_range(start_date, end_date)

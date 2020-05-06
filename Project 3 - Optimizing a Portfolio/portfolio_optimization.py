@@ -24,11 +24,7 @@ def portfolio_statistics(normed, allocs, start_value):
 
 
 def optimize_portfolio(
-    start_date,
-    end_date,
-    symbols,
-    gen_plot,
-    start_value,
+    start_date, end_date, symbols, gen_plot, start_value,
 ):
 
     risk_free_rate = 0.0
@@ -107,7 +103,11 @@ def optimization_driver():
         daily_return_std,
         sharpe_ratio,
     ) = optimize_portfolio(
-        start_date=start_date, end_date=end_date, symbols=symbols, gen_plot=gen_plots, start_value=start_value
+        start_date=start_date,
+        end_date=end_date,
+        symbols=symbols,
+        gen_plot=gen_plots,
+        start_value=start_value,
     )
     # for ease of viewing
     allocations = allocations.round(4)
