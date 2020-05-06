@@ -1,7 +1,8 @@
 import pandas as pd
 from historical_data import *
-
-
+import matplotlib
+matplotlib.use("TKAgg")
+from matplotlib import pyplot as plt
 def symbol_to_path(symbol):
     """Return CSV file path given ticker symbol.
     If CSV is not already downloaded, will download from yahoo finance """
@@ -40,3 +41,9 @@ def get_data(symbols, dates, removeSPY=True, colname="Adj Close"):
         df = df.drop(columns="SPY")
 
     return df
+
+def plot_data(df, title="Stock prices", xlabel="Date", ylabel="Price"):
+    """Plot stock prices with a custom title and meaningful axis labels."""
+    ax = df.plot(title=title, fontsize=12)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)

@@ -41,7 +41,7 @@ class Player(object):
         if self.last_state is not None:
             self.ai.learn(self.last_state, self.last_action, reward, state)
         action = self.ai.choose_action(state)
-        # print(action)
+
         self.last_state = state
         self.last_action = action
 
