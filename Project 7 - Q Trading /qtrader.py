@@ -2,20 +2,34 @@ import pandas as pd
 import qlearn_trading as qlearn
 import qutil
 from historical_data import *
-import time
+import re
 
 class QTrader(object):
-    def __init__(self, actions, parameters, start_date, start_balance=100000):
+    def __init__(self, actions, parameters, start_date, start_balance=100000, qfile='qtables/qtable.txt'):
+
         self.actions = actions
         self.start_balance = start_balance
         self.balance = start_balance
         self.parameters = parameters
         self.start_date = start_date
         self.holding = 0
-        # self.value = pd.DataFrame({"Date": [start_date], "Value": [start_balance]})
+
+        qtable = {}
+        with open(qfile, "r") as f:
+            lines = f.readlines()
+        for line in lines:
+            line = line.split(":")
+            index = line[0].split(",")
+            index[0] = int(re.sub("[^A-Za-z0-9]+", "", index[0]))
+            index[1] = re.sub("[^A-Za-z0-9]+", "", index[1])
+            value = line[1].strip("\n")
+            value = float(value)
+            qtable[(index[0], index[1])] = value
+
+
         self.value = pd.DataFrame()
         self.ai = qlearn.QLearn(
-            actions, q=None, c=0.3, alpha=0.2, gamma=0.9, cdecay=0.9
+            actions, q=qtable, c=0.3, alpha=0.2, gamma=0.9, cdecay=0.9,
         )
 
     def calculate_state_value(self, stock, end_date, data):
@@ -24,7 +38,7 @@ class QTrader(object):
         """
 
         date_range = pd.date_range("2010-01-01", end_date)
-        adj_close = data['2010-01-01' : end_date]
+        adj_close = data['2010-01-01': end_date]
         self.adj_close = adj_close.copy()
         daily_return = (adj_close[1:] / adj_close.values[:-1]) - 1
 
@@ -36,6 +50,7 @@ class QTrader(object):
         self.value = self.value.append(
             pd.DataFrame({"Value": [holding_value + self.balance]}, index=[end_date])
         )
+
         reward = holding_value + self.balance - self.start_balance
         state = [1]
 
@@ -46,7 +61,7 @@ class QTrader(object):
             sma = adj_close.iloc[:, 0].rolling(window=window).mean()
             adj = adj_close.iloc[:, 0]
             sma_adj = (sma / adj).dropna()
-            steps = 99
+            steps = 30
             stepsize = math.floor(len(sma_adj) / steps)
 
             thresholds = []
@@ -64,6 +79,17 @@ class QTrader(object):
             x = discritized[date_range].dropna()
 
             state.append(x[-1])
+
+        if "Bolinger Bands" in self.parameters:
+            window = self.parameters['Bolinger Bands']
+            rolling_mean = adj_close.iloc[:, 0].rolling(window=window).mean()
+            rolling_std = adj_close.iloc[:, 0].rolling(window=window).std()
+            factor = float((adj_close.iloc[-1] - rolling_mean[-1]) / (rolling_std[-1]))
+            if factor >= 0:
+                d = "1" + str(round(factor * 10))
+            else:
+                d = "2" + str(abs(round(factor * 10)))
+            state.append(int(d))
 
         if "Holding" in self.parameters:
             state.append(self.holding)
@@ -118,10 +144,11 @@ class QTrader(object):
             last_state = state
             last_action = action
 
-    def plot_port_value(self):
+    def plot_port_value(self, normalized=False):
 
         self.value.index = pd.DatetimeIndex(self.value.index).normalize()
-        qutil.plot_data(self.value, "Portfolio Value")
+        if normalized:
+            qutil.plot_data(self.value/self.value.values[0], "Portfolio Value")
 
     def output_table(self):
         with open("qtables/qtable.txt", "w+") as f:
