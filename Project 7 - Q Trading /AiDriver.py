@@ -24,10 +24,11 @@ if __name__ == "__main__":
     starting_balance = 100000
     start_date = "2012-01-01"
     end_date = "2018-01-01"
-    # stock_list = ["GOOG", "TSLA", "AAPL", "AA", "A"]
+
     with open('../data/Lists/limited.txt', 'r') as f:
         lines = f.read().splitlines()
     stock_list = lines
+    stock_list = ["GOOG"]
     ai_trader = qtrader.QTrader(actions, parameters, start_date, starting_balance)
 
     times = []
@@ -47,19 +48,10 @@ if __name__ == "__main__":
     ai_trader.output_table()
 
     df = qutil.get_data(['GOOG'], pd.date_range(start_date, end_date))
-    qutil.plot_data(df/df.values[0])
+    qutil.plot_data(df / df.values[0])
     ai_trader.train('GOOG', '2018-01-01', '2019-01-01')
     ai_trader.plot_port_value(normalized=True)
 
-    df = qutil.get_data(['AAPL'], pd.date_range(start_date, end_date))
-    qutil.plot_data(df / df.values[0])
-    ai_trader.train('AAPL', '2018-01-01', '2019-01-01')
-    ai_trader.plot_port_value(normalized=True)
-
-    df = qutil.get_data(['NVDA'], pd.date_range(start_date, end_date))
-    qutil.plot_data(df / df.values[0])
-    ai_trader.train('NVDA', '2018-01-01', '2019-01-01')
-    ai_trader.plot_port_value(normalized=True)
 
     print(f'--- Total training time : {round(sum(times), 2)} ---')
     print(f'--- Average per training session : {round(average(times), 2)} ---')
