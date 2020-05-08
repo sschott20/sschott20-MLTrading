@@ -2,7 +2,7 @@ import pandas as pd
 import qlearn_trading as qlearn
 import qutil
 from historical_data import *
-
+import time
 
 class QTrader(object):
     def __init__(self, actions, parameters, start_date, start_balance=100000):
@@ -18,32 +18,35 @@ class QTrader(object):
             actions, q=None, c=0.3, alpha=0.2, gamma=0.9, cdecay=0.9
         )
 
-    def calculate_state_value(self, stock, end_date):
+    def calculate_state_value(self, stock, end_date, data):
         """
         range should be from start of data to latest date that the ai is allowed to see
         """
-        date_range = pd.date_range("2015-01-01", end_date)
-        adj_close = qutil.get_data([stock], date_range, removeSPY=True)
+
+        date_range = pd.date_range("2010-01-01", end_date)
+        adj_close = data['2010-01-01' : end_date]
         self.adj_close = adj_close.copy()
         daily_return = (adj_close[1:] / adj_close.values[:-1]) - 1
-        holding_return = float(adj_close.iloc[-1] * self.holding)
-        self.value = self.value.append(
-            pd.DataFrame({"Value": [(holding_return + self.balance) / self.balance]}, index=[end_date])
-        )
-        reward = holding_return + self.balance - self.start_balance
 
-        state = []
-        # if "Balance" in self.parameters:
-        #     print(round(self.balance))
-        #     state.append(round(self.balance))
+        holding_value = float(adj_close.iloc[-1] * self.holding)
+        # print(end_date, round(self.balance), self.holding, round(holding_value), round(float(adj_close.iloc[-1])))
+        # self.value = self.value.append(
+        #     pd.DataFrame({"Value": [(holding_return + self.balance) / self.balance]}, index=[end_date])
+        # )
+        self.value = self.value.append(
+            pd.DataFrame({"Value": [holding_value + self.balance]}, index=[end_date])
+        )
+        reward = holding_value + self.balance - self.start_balance
+        state = [1]
+
         if "Daily Return" in self.parameters:
-            state.append(int(holding_return * 10000))
+            state.append(int(holding_value * 10000))
         if "Adj/SMA" in self.parameters:
             window = self.parameters["Adj/SMA"]
             sma = adj_close.iloc[:, 0].rolling(window=window).mean()
             adj = adj_close.iloc[:, 0]
             sma_adj = (sma / adj).dropna()
-            steps = 70
+            steps = 99
             stepsize = math.floor(len(sma_adj) / steps)
 
             thresholds = []
@@ -64,7 +67,6 @@ class QTrader(object):
 
         if "Holding" in self.parameters:
             state.append(self.holding)
-
         q = []
         for j in state:
             q.append("{0:0=3d}".format(j))
@@ -80,26 +82,30 @@ class QTrader(object):
         last_action = None
         last_state = None
         current_date = start_date
+
+        date_range = pd.date_range("2010-01-01", end_date)
+        adj_close = qutil.get_data([stock], date_range, removeSPY=True)
+
         self.trading_dates = qutil.get_data(
             ["SPY"], pd.date_range(start_date, end_date), removeSPY=False
         ).index
-        # print(start_index)
+
         for date in self.trading_dates:
-            state, reward = self.calculate_state_value(stock, date)
+            # print(self.balance, self.holding)
+            state, reward = self.calculate_state_value(stock, date, adj_close)
 
             if last_state != None:
                 self.ai.learn(last_state, last_action, reward, state)
 
             action = self.ai.choose_action(state)
-            if action != "SAX" and action != "NNX":
+            if action != "NNN":
                 amount = int(action[1:3])
             else:
                 amount = 0
-            current_price = float(self.adj_close.iloc[-1])
 
+            current_price = float(self.adj_close.iloc[-1])
             if action[0] == "S":
-                if amount > self.holding or action == "SA":
-                    action = "SA"
+                if amount > self.holding:
                     amount = self.holding
                 self.balance += current_price * amount
                 self.holding -= amount
@@ -109,15 +115,12 @@ class QTrader(object):
                 action = "B" + str(amount)
                 self.holding += amount
                 self.balance -= current_price * amount
-            # print(action)
             last_state = state
             last_action = action
-            # print(action)
 
     def plot_port_value(self):
-        # self.value.index =
+
         self.value.index = pd.DatetimeIndex(self.value.index).normalize()
-        # self.value.set_index("Date")
         qutil.plot_data(self.value, "Portfolio Value")
 
     def output_table(self):
