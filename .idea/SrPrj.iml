@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Utility" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Project 7 - Q Trading " isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Project 8 - Bolinger Bot" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (ml4t) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
