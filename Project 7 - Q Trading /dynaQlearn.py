@@ -19,6 +19,7 @@ class DynaQLearn(object):
         self.actions = actions
 
         self.t = {}
+
     def get_q(self, state, action):
         # searches Q table for (state,action) and returns 0 if it doesn't exist
         return self.q.get((state, action), 0.0)
@@ -49,9 +50,11 @@ class DynaQLearn(object):
                 i = q.index(maxQ)
             action = self.actions[i]
             return action
+
     def halucinate(self):
 
         pass
+
     def learn(self, state1, action1, reward, state2):
         max_future_reward = max([self.get_q(state2, a) for a in self.actions])
         # print("max future q: ", max_future_reward)

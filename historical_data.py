@@ -8,9 +8,6 @@ import time
 # period1 and period2 are Unix time stamps for your start and end date
 # interval is the data retrieval interval (this can be either 1d, 1w or 1m)
 
-# NEED RETURN AND OUTSTANDING NUMBER OF SHARES
-
-
 def pull_all_data(src, start_idx=0):
     print("PULLING DATA FROM: " + src)
     with open(src, "r") as file:
@@ -20,7 +17,6 @@ def pull_all_data(src, start_idx=0):
             company = file_lines[i].strip()
             ticker = company.split()
             pull_specific_stocks([ticker[0]])
-
 
 def pull_specific_stocks(stocks):
     """Download data of specific stocks from yahoo finance"""
@@ -40,15 +36,11 @@ def pull_specific_stocks(stocks):
                 file.write("\n")
                 file.close()
             print(e)
-
-
 current_time = str(math.floor(time.time()))
 
 # Times:
 # 2019-01-01 : 1546300800
 # 2000-01-01 : 946684800
-
-
 def make_url(
     ticker_symbol, period1="946684800", period2=current_time, interval="1d",
 ):

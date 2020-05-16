@@ -1,0 +1,6 @@
+30 2.2 Bot return : 1.988 Stock Return : 2.555
+30 2.2 Bot return : 1.939 Stock Return : 2.555
+30 2.2 Bot return : 1.47 Stock Return : 2.555
+20 1.9 Bot return : 1.352 Stock Return : 2.555
+20 1.9 Bot return : 1.382 Stock Return : 2.555
+20 2.2 Bot return : 1.272 Stock Return : 2.555

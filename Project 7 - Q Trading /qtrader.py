@@ -4,8 +4,16 @@ import qutil
 from historical_data import *
 import re
 
+
 class QTrader(object):
-    def __init__(self, actions, parameters, start_date, start_balance=100000, qfile='qtables/qtable.txt'):
+    def __init__(
+        self,
+        actions,
+        parameters,
+        start_date,
+        start_balance=100000,
+        qfile="qtables/qtable.txt",
+    ):
 
         self.actions = actions
         self.start_balance = start_balance
@@ -26,7 +34,6 @@ class QTrader(object):
             value = float(value)
             qtable[(index[0], index[1])] = value
 
-
         self.value = pd.DataFrame()
         self.ai = qlearn.QLearn(
             actions, q=qtable, c=0.3, alpha=0.2, gamma=0.9, cdecay=0.9,
@@ -38,7 +45,7 @@ class QTrader(object):
         """
 
         date_range = pd.date_range("2010-01-01", end_date)
-        adj_close = data['2010-01-01': end_date]
+        adj_close = data["2010-01-01":end_date]
         self.adj_close = adj_close.copy()
         daily_return = (adj_close[1:] / adj_close.values[:-1]) - 1
 
@@ -81,7 +88,7 @@ class QTrader(object):
             state.append(x[-1])
 
         if "Bolinger Bands" in self.parameters:
-            window = self.parameters['Bolinger Bands']
+            window = self.parameters["Bolinger Bands"]
             rolling_mean = adj_close.iloc[:, 0].rolling(window=window).mean()
             rolling_std = adj_close.iloc[:, 0].rolling(window=window).std()
             factor = float((adj_close.iloc[-1] - rolling_mean[-1]) / (rolling_std[-1]))
@@ -148,7 +155,7 @@ class QTrader(object):
 
         self.value.index = pd.DatetimeIndex(self.value.index).normalize()
         if normalized:
-            qutil.plot_data(self.value/self.value.values[0], "Portfolio Value")
+            qutil.plot_data(self.value / self.value.values[0], "Portfolio Value")
 
     def output_table(self):
         with open("qtables/qtable.txt", "w+") as f:
