@@ -1,2 +1,0 @@
- --- 1000000 games completed over 667.3 seconds ---
-M: 439991, T: 560010
